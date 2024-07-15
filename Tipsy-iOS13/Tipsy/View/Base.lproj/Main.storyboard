@@ -197,18 +197,19 @@
                         <outlet property="splitStepper" destination="haq-5m-pqs" id="MIC-Rq-kFa"/>
                         <outlet property="tipsLabel" destination="wxF-MC-EVl" id="4P1-rZ-IwH"/>
                         <outlet property="tipsStepper" destination="kzR-ul-AXH" id="D6Y-KQ-vK9"/>
+                        <segue destination="Dnf-m2-FPm" kind="presentation" identifier="totalCalcultion" id="1Gs-4k-dv3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="168.70229007633588" y="117.60563380281691"/>
+            <point key="canvasLocation" x="-4" y="118"/>
         </scene>
         <!--Result View Controller-->
         <scene sceneID="bJV-Cc-sXH">
             <objects>
                 <viewController id="Dnf-m2-FPm" customClass="ResultViewController" customModule="Tipsy" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DNW-gk-FsX">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZCe-Te-efL">
@@ -245,7 +246,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zzn-9K-6hu">
-                                <rect key="frame" x="96.666666666666686" y="764" width="200" height="54"/>
+                                <rect key="frame" x="96.666666666666686" y="788" width="200" height="54"/>
                                 <color key="backgroundColor" red="0.0" green="0.69019607839999997" blue="0.41960784309999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="0Lh-eY-3GO"/>

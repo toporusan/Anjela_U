@@ -11,7 +11,7 @@ import Foundation
 struct ResultModel {
     var billTotal = String()
     var tip = Int()
-    var split = Double()
+    var split = Int()
     var totalResult = Double()
     
     
