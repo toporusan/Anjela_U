@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import UIKit
 
 struct ResultModel {
     var billTotal = String()
-    var tip = Int()
-    var split = Int()
-    var totalResult = Double()
+    var tip = String()
+    var split = String()
+    var totaLSums:[UITextField] = []
+    var totalResult = String()
     
     
 }
