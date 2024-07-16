@@ -21,8 +21,7 @@ class CalculateViewController: UIViewController, UITextFieldDelegate {
     var textFields: [UITextField] = [] // массив текстовых полей
     var textLabels: [UILabel] = [] // массив нумераций текстовых полей
     var splitCount = 2 // число для начального отображения полей
-    var extraTextField: UITextField! // дополнительное поле для общей суммы
-    
+
     var result1: ResultModel = ResultModel()
 
     override func viewDidLoad() {
@@ -39,7 +38,8 @@ class CalculateViewController: UIViewController, UITextFieldDelegate {
         tipsStepper.maximumValue = 100
         tipsStepper.stepValue = 1
         tipsStepper.value = 15
-
+        
+        
         splitingAndTextFields()
     }
 
@@ -120,19 +120,19 @@ class CalculateViewController: UIViewController, UITextFieldDelegate {
                 lastTextField.bottomAnchor.constraint(equalTo: peoples.bottomAnchor, constant: -20).isActive = true
             }
 
-            extraTextField = UITextField()
-            extraTextField.borderStyle = .roundedRect
-            extraTextField.placeholder = "Общее"
-            extraTextField.delegate = self
-            extraTextField.keyboardType = .decimalPad
-            peoples.addSubview(extraTextField)
-
-            extraTextField.translatesAutoresizingMaskIntoConstraints = false
-            extraTextField.leadingAnchor.constraint(equalTo: peoples.leadingAnchor, constant: 30).isActive = true
-            extraTextField.trailingAnchor.constraint(equalTo: peoples.trailingAnchor, constant: -20).isActive = true
-            // extraTextField.topAnchor.constraint(equalTo: peoples.topAnchor, constant: 140).isActive = true
-            extraTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-            extraTextField.bottomAnchor.constraint(equalTo: peoples.bottomAnchor, constant: 40).isActive = true
+//            extraTextField = UITextField()
+//            extraTextField.borderStyle = .roundedRect
+//            extraTextField.placeholder = "Общее"
+//            extraTextField.delegate = self
+//            extraTextField.keyboardType = .decimalPad
+//            peoples.addSubview(extraTextField)
+//
+//            extraTextField.translatesAutoresizingMaskIntoConstraints = false
+//            extraTextField.leadingAnchor.constraint(equalTo: peoples.leadingAnchor, constant: 30).isActive = true
+//            extraTextField.trailingAnchor.constraint(equalTo: peoples.trailingAnchor, constant: -20).isActive = true
+//            // extraTextField.topAnchor.constraint(equalTo: peoples.topAnchor, constant: 140).isActive = true
+//            extraTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+//            extraTextField.bottomAnchor.constraint(equalTo: peoples.bottomAnchor, constant: 40).isActive = true
         }
     }
 
@@ -165,13 +165,13 @@ class CalculateViewController: UIViewController, UITextFieldDelegate {
         return true
     }
 
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let resultViewController = segue.destination as! ResultViewController
 
         result1.billTotal = inputBillSum.text ?? "0.0"
         result1.split = splitLabel.text ?? "0"
         result1.tip = tipsLabel.text ?? "0"
-        result1.totalResult = extraTextField.text ?? "0.0"
         result1.totaLSums = textFields
         
         resultViewController.result2 = result1

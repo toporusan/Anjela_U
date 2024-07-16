@@ -14,7 +14,6 @@ struct ResultModel {
     var tip = String()
     var split = String()
     var totaLSums:[UITextField] = []
-    var totalResult = String()
     
     
 }
