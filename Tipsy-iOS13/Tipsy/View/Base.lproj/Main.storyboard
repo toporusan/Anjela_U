@@ -191,6 +191,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="calculateButton" destination="FSl-VY-LBj" id="FKU-bb-t4P"/>
                         <outlet property="inputBillSum" destination="wcN-ka-Q4F" id="olc-ln-pvb"/>
                         <outlet property="peoples" destination="JZK-wM-COq" id="ybG-Si-I8d"/>
                         <outlet property="splitLabel" destination="kfz-b5-cEv" id="NDm-nS-R19"/>

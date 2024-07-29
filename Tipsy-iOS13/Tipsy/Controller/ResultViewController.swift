@@ -9,9 +9,8 @@
 import UIKit
 
 class ResultViewController: UIViewController, UITextFieldDelegate {
-    
-    @IBOutlet weak var splitView: UILabel!
-    @IBOutlet weak var tipsView: UILabel!
+    @IBOutlet var splitView: UILabel!
+    @IBOutlet var tipsView: UILabel!
     @IBOutlet var peoples: UIScrollView!
 
     var splitCount = 2 // число для начального отображения полей
@@ -23,7 +22,7 @@ class ResultViewController: UIViewController, UITextFieldDelegate {
     var billTotal = 0.0
     var split = 0
     var tips = 0
-    
+
     var sums: [Double] = []
     var additionalSum = 0.0
     var tipsSum = 0.0
@@ -34,17 +33,17 @@ class ResultViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         calculate()
         sumsWithAdditional()
-        
+
         splitView.text = String(split)
         tipsView.text = String(tips)
         splitingAndTextFields()
     }
-    
-    
+
     @IBAction func recalculateButton(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
-    
+
+    // метод выводит рассчитанные данные на дисплей
     func splitingAndTextFields() {
         // Удаление всех предыдущих текстовых полей
         textFields.forEach { $0.removeFromSuperview() }
@@ -107,35 +106,40 @@ class ResultViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    
+//      Метод присваивает значение переменным для калькуляций
     func calculate() {
         billTotal = Double(result2.billTotal) ?? 0.0
         split = Int(result2.split) ?? 0
         tips = Int(result2.tip) ?? 0
-        
+
         for e in result2.totaLSums {
-            sums.append(Double(e.text ?? "0.0") ?? 0.0)
+            // Проверяем, что текстовое поле не пустое и не равно "0.0"
+            if let text = e.text, let sumWithoutTip = Double(text), sumWithoutTip != 0.0 {
+                sums.append(sumWithoutTip)
+            }
         }
-        
-        var sumInt = 0
+
+        var sumInt = 0 // складываются расходы каждого человека в совокупности
         for e in sums {
             sumInt += Int(e)
         }
-        additionalSum = (((billTotal * 100.00) / Double((100 + tips)))) - Double(sumInt)
-        tipsSum = billTotal - Double(sumInt) - additionalSum
+
+        additionalSum = ((billTotal * 100.00) / Double(100 + tips)) - Double(sumInt) // получаем общие затраты
+        print(additionalSum)
+        tipsSum = billTotal - Double(sumInt) - additionalSum // сумма процентов
+        print(tipsSum)
     }
 
-    func sumsWithAdditional(){
-        
-        let sum = (additionalSum + tipsSum) / Double(split)
+    
+    // метод выводит сумму к оплате с каждого человека с учётом
+    // разделённой общей суммы расходов на количество человек
+    
+    func sumsWithAdditional() {
+        let sum = additionalSum / Double(split) // разделяем общую сумму на количество человек
         var arr: [Double] = []
-        for e in sums{
-            arr.append(e + sum)
+        for e in sums {
+            arr.append((e + sum) + ((e + sum) * (Double (tips) / 100)))// массив: (основная сумма + часть от общей суммы) + 15%
         }
-        sums = arr
+        sums = arr // присваиваем массив с изменённой суммой на каждого человека
     }
-    
-
-    
-    
 }
