@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController, UITextFieldDelegate {
+class WeatherViewController: UIViewController, UITextFieldDelegate,WeatherManagerDelegate {
     // Связь с элементами пользовательского интерфейса
     @IBOutlet var conditionImageView: UIImageView!
     @IBOutlet var temperatureLabel: UILabel!
@@ -16,11 +16,13 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var searchField: UITextField!
     
     var weatherManager = WeatherManager()
+    
 
     override func viewDidLoad() {
             super.viewDidLoad()
             // Устанавливаем делегата для текстового поля
             searchField.delegate = self
+            weatherManager.delegate = self
             
             // Создаем UITapGestureRecognizer и привязываем его к методу dismissKeyboard
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -81,5 +83,11 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
             view.endEditing(true)
         }
     
-    }
+        
+        func didUpdateWeather(weather: WeatherModel){
+            print(weather.temperatureString)
+            print(weather.temperature)
+        }
+    
+}
 
