@@ -8,86 +8,89 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController, UITextFieldDelegate,WeatherManagerDelegate {
+class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManagerDelegate {
     // Связь с элементами пользовательского интерфейса
     @IBOutlet var conditionImageView: UIImageView!
     @IBOutlet var temperatureLabel: UILabel!
     @IBOutlet var cityLabel: UILabel!
     @IBOutlet var searchField: UITextField!
-    
+
     var weatherManager = WeatherManager()
-    
 
     override func viewDidLoad() {
-            super.viewDidLoad()
-            // Устанавливаем делегата для текстового поля
-            searchField.delegate = self
-            weatherManager.delegate = self
-            
-            // Создаем UITapGestureRecognizer и привязываем его к методу dismissKeyboard
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-            // Добавляем распознаватель жестов в основное представление
-            view.addGestureRecognizer(tapGesture)
-        }
+        super.viewDidLoad()
+        // Устанавливаем делегата для текстового поля
+        searchField.delegate = self
+        weatherManager.delegate = self
 
-        // Метод вызывается при нажатии кнопки поиска
-        @IBAction func searchButton(_ sender: UIButton) {
-            // Получаем текст из текстового поля
-            _ = searchField.text ?? "None text"
-            // Завершаем редактирование, скрывая клавиатуру
-            searchField.endEditing(true)
-            if let city = searchField.text, !city.isEmpty {
-                    weatherManager.fetchWeather(cityName: city)
-                }
-            searchField.text = ""
-        }
+        // Создаем UITapGestureRecognizer и привязываем его к методу dismissKeyboard
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        // Добавляем распознаватель жестов в основное представление
+        view.addGestureRecognizer(tapGesture)
+    }
 
-        // Метод делегата, вызывается при нажатии клавиши Return (GO) на клавиатуре
-        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            // Получаем текст из текстового поля
-            _ = searchField.text ?? "None text"
-            // Завершаем редактирование, скрывая клавиатуру
-            searchField.endEditing(true)
-            
-            if let city = searchField.text, !city.isEmpty {
-                    weatherManager.fetchWeather(cityName: city)
-                }
-            searchField.text = ""
-                return true
+    // Метод вызывается при нажатии кнопки поиска
+    @IBAction func searchButton(_ sender: UIButton) {
+        // Получаем текст из текстового поля
+        _ = searchField.text ?? "None text"
+        // Завершаем редактирование, скрывая клавиатуру
+        searchField.endEditing(true)
+        if let city = searchField.text, !city.isEmpty {
+            weatherManager.fetchWeather(cityName: city)
         }
+        searchField.text = ""
+    }
 
-        // Метод делегата, вызывается после завершения редактирования текстового поля
-        func textFieldDidEndEditing(_ textField: UITextField) {
+    // Метод делегата, вызывается при нажатии клавиши Return (GO) на клавиатуре
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // Получаем текст из текстового поля
+        _ = searchField.text ?? "None text"
+        // Завершаем редактирование, скрывая клавиатуру
+        searchField.endEditing(true)
+
+        if let city = searchField.text, !city.isEmpty {
+            weatherManager.fetchWeather(cityName: city)
+        }
+        searchField.text = ""
+        return true
+    }
+
+    // Метод делегата, вызывается после завершения редактирования текстового поля
+    func textFieldDidEndEditing(_ textField: UITextField) {
 //            if let city = searchField.text, !city.isEmpty{
 //                weatherManager.fetchWeather(cityName: city)
 //            }
-            // Очищаем текстовое поле
-            //searchField.text = ""
-        }
+        // Очищаем текстовое поле
+        // searchField.text = ""
+    }
 
-        // Метод делегата, вызывается для определения, должно ли текстовое поле завершать редактирование
-        func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-            // Проверяем, не пустое ли текстовое поле
-            if searchField.text != "" {
-                return true
-            } else {
-                // Если текстовое поле пустое, показываем placeholder и не завершаем редактирование
-                searchField.placeholder = "Type something"
-                return true
-            }
+    // Метод делегата, вызывается для определения, должно ли текстовое поле завершать редактирование
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        // Проверяем, не пустое ли текстовое поле
+        if searchField.text != "" {
+            return true
+        } else {
+            // Если текстовое поле пустое, показываем placeholder и не завершаем редактирование
+            searchField.placeholder = "Type something"
+            return true
         }
+    }
 
-        // Метод, вызываемый при касании экрана
-        @objc func dismissKeyboard() {
-            // Завершаем редактирование, скрывая клавиатуру
-            view.endEditing(true)
+    // Метод, вызываемый при касании экрана
+    @objc func dismissKeyboard() {
+        // Завершаем редактирование, скрывая клавиатуру
+        view.endEditing(true)
+    }
+
+    func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
+        DispatchQueue.main.async {
+            self.temperatureLabel.text = weather.temperatureString
+            self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+            self.cityLabel.text = weather.cityName
         }
-    
-        
-        func didUpdateWeather(weather: WeatherModel){
-            print(weather.temperatureString)
-            print(weather.temperature)
-        }
-    
+    }
+
+    func didFailWithError(error: Error) {
+        print(error)
+    }
 }
-
