@@ -6,19 +6,28 @@
 //  Copyright © 2019 App Brewery. All rights reserved.
 //
 
+import CoreLocation
 import UIKit
 
-class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManagerDelegate {
+class WeatherViewController: UIViewController {
     // Связь с элементами пользовательского интерфейса
     @IBOutlet var conditionImageView: UIImageView!
     @IBOutlet var temperatureLabel: UILabel!
     @IBOutlet var cityLabel: UILabel!
     @IBOutlet var searchField: UITextField!
-
+    
+    
     var weatherManager = WeatherManager()
+    let locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // работа с GPS
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation() // запускает работу GPS навигации
+
         // Устанавливаем делегата для текстового поля
         searchField.delegate = self
         weatherManager.delegate = self
@@ -28,9 +37,18 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManag
         // Добавляем распознаватель жестов в основное представление
         view.addGestureRecognizer(tapGesture)
     }
+    
+    @IBAction func locationPresed(_ sender: Any) {
+        locationManager.requestLocation()
+    }
+    
+}
 
+// MARK: - UITextFieldDelegate
+
+extension WeatherViewController: UITextFieldDelegate {
     // Метод вызывается при нажатии кнопки поиска
-    @IBAction func searchButton(_ sender: UIButton) {
+    @IBAction func searchPressed(_ sender: UIButton) {
         // Получаем текст из текстового поля
         _ = searchField.text ?? "None text"
         // Завершаем редактирование, скрывая клавиатуру
@@ -81,16 +99,38 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManag
         // Завершаем редактирование, скрывая клавиатуру
         view.endEditing(true)
     }
+}
 
+// MARK: - WeatherManagerDelegate
+
+extension WeatherViewController: WeatherManagerDelegate {
     func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
         DispatchQueue.main.async {
             self.temperatureLabel.text = weather.temperatureString
-            self.conditionImageView.image = UIImage(systemName: weather.conditionName)
             self.cityLabel.text = weather.cityName
+            self.conditionImageView.image = UIImage(systemName: weather.conditionName)
+            
         }
     }
 
     func didFailWithError(error: Error) {
+        print(error)
+    }
+}
+
+// MARK: - CLLocationManagerDelegate
+
+extension WeatherViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last{
+            locationManager.stopUpdatingLocation() // останавливает работу GPS навигации
+            let lat = location.coordinate.latitude
+            let lon = location.coordinate.longitude
+            weatherManager.fetchWeather(latitude:lat , longitude: lon)
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
         print(error)
     }
 }
